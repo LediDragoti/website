@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Taxi Marildo - Dhërmi</title>
+  <style>
+    /* Your existing styles here... */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      color: #333;
+      background-color: #f9f9f9;
+    }
+
+    /* HERO SECTION */
+    .hero {
+      background: url('dhermi.jpg') center/cover no-repeat;
+      height: 50vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      text-align: center;
+      position: relative;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .hero-content {
+      z-index: 2;
+    }
+
+    .hero h1 {
+      font-size: 2.2rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .hero h2 {
+      font-size: 1.3rem;
+      font-weight: 300;
+    }
+
+    /* NAVBAR */
+    nav {
+      background-color: #222;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      color: white;
+      margin: 0 1rem;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    /* Language selector style */
+    .lang-select {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      z-index: 1001;
+      color: #222;
+      font-weight: bold;
+      padding: 0.3rem 0.7rem;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+      background-color: white;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+
+
+    /* TAXI MAN SECTION */
+    .taxi-man {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 4rem 1rem;
+      background-color: white;
+      text-align: center;
+    }
+
+    .taxi-man img {
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      object-fit: cover;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      margin-bottom: 1.5rem;
+    }
+
+    .taxi-man h3 {
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .taxi-man p {
+      font-size: 1.1rem;
+      max-width: 600px;
+    }
+
+    @media (min-width: 768px) {
+      .taxi-man {
+        flex-direction: row;
+        justify-content: center;
+        text-align: left;
+      }
+
+      .taxi-man img {
+        margin-right: 2rem;
+        margin-bottom: 0;
+      }
+
+      .taxi-man .info {
+        max-width: 600px;
+      }
+    }
+
+    /* WHATSAPP FLOATING BUTTON */
+    .whatsapp-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #25d366;
+      color: white;
+      padding: 12px 18px;
+      border-radius: 30px;
+      font-weight: bold;
+      text-decoration: none;
+      font-size: 16px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      z-index: 1000;
+      transition: transform 0.2s;
+    }
+
+    .whatsapp-button:hover {
+      transform: scale(1.05);
+    }
+
+    /* Modal backdrop with blur */
+    #contactModal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+  /* Modal content box */
+  #contactModal > div {
+    background: #fff;
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    max-width: 360px;
+    width: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    text-align: left;
+    position: relative;
+  }
+
+  /* Header */
+  #contactModal h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: #222;
+  }
+
+  /* Contact info */
+  #contactModal p {
+    margin: 8px 0;
+    font-size: 1rem;
+  }
+
+  #contactModal strong {
+    color: #555;
+  }
+
+  /* Close button */
+  #closeModal {
+    margin-top: 25px;
+    padding: 10px 20px;
+    background-color: #0078d7;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  #closeModal:hover {
+    background-color: #005fa3;
+  }
+
+  /* Optional: Add focus style for accessibility */
+  #closeModal:focus {
+    outline: 2px solid #005fa3;
+    outline-offset: 2px;
+  }
+  </style>
+</head>
+<body>
+
+  <!-- HERO SECTION -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1 id="hero-title">TAXI MARILDO</h1>
+      <h2 id="hero-subtitle">Taxi Dhërmi Albania</h2>
+    </div>
+  </section>
+
+  <!-- NAVIGATION BAR -->
+  <nav>
+    <a href="#home" id="nav-home">Home</a>
+    <a href="#about" id="nav-about">About Driver</a>
+    <a href="#" id="contactNav" style="color: white; margin-right: 1rem; cursor: pointer;">Contact</a>
+    <select class="lang-select" id="language-select" aria-label="Select language">
+      <option value="en">English</option>
+      <option value="it">Italiano</option>
+      <option value="sq">Shqip</option>
+    </select>
+  </nav>
+  
+<!-- Modal Overlay -->
+
+<div id="contactModal">
+  <div>
+    <h2>Contact Driver</h2>
+    <p><strong>Name:</strong> Marildo</p>
+    <p><strong>Phone:</strong> +355 69 326 7518</p>
+    <p><strong>Email:</strong> marildo@example.com</p>
+    <button id="closeModal">Close</button>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const contactNav = document.getElementById('contactNav');
+    const contactModal = document.getElementById('contactModal');
+    const closeModal = document.getElementById('closeModal');
+
+    // Mostra il modale solo quando si clicca sul link
+    contactNav.addEventListener('click', function (e) {
+      e.preventDefault();
+      contactModal.style.display = 'flex';
+    });
+
+    // Chiudi quando si clicca sul bottone
+    closeModal.addEventListener('click', function () {
+      contactModal.style.display = 'none';
+    });
+
+    // Chiudi quando si clicca fuori dal contenuto
+    contactModal.addEventListener('click', function (e) {
+      if (e.target === contactModal) {
+        contactModal.style.display = 'none';
+      }
+    });
+  });
+</script>
+
+
+
+  <!-- TAXI DRIVER SECTION -->
+  <section class="taxi-man" id="about">
+    <img src="marildo.png" alt="Taxi Driver Photo">
+    <div class="info">
+      <h3 id="driver-name">Marildo</h3>
+      <p id="driver-description">Hi, I'm Marildo, a professional taxi driver based in the beautiful coastal town of Dhërmi, Albania. With over 10 years of experience, I offer safe, comfortable, and reliable transportation throughout the Albanian Riviera. Whether you're headed to the airport, a hidden beach, or just around town — I’m here to get you there.</p>
+    </div>
+  </section>
+
+  <!-- WHY CHOOSE US SECTION -->
+  <section style="background-color: #f0f0f0; padding: 4rem 1rem; text-align: center;">
+    <h2 id="why-choose-title" style="font-size: 2rem; margin-bottom: 1.5rem;">Why Choose Us?</h2>
+    <div style="max-width: 1000px; margin: auto; display: flex; flex-wrap: wrap; gap: 2rem; justify-content: center;">
+      <div style="flex: 1; min-width: 250px;">
+        <h3 id="reliable-service-title" style="margin-bottom: 0.5rem;">🚗 Reliable Service</h3>
+        <p id="reliable-service-text">Always on time, every time. Punctuality is our promise.</p>
+      </div>
+      <div style="flex: 1; min-width: 250px;">
+        <h3 id="local-knowledge-title" style="margin-bottom: 0.5rem;">🌍 Local Knowledge</h3>
+        <p id="local-knowledge-text">We know Dhërmi like no one else. Get local tips along the way.</p>
+      </div>
+      <div style="flex: 1; min-width: 250px;">
+        <h3 id="safe-clean-title" style="margin-bottom: 0.5rem;">🛡️ Safe & Clean Rides</h3>
+        <p id="safe-clean-text">Your safety and comfort are our top priorities on every journey.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS SECTION -->
+<section style="background-color: #fff; padding: 4rem 1rem; text-align: center;">
+  <h2 id="testimonials-title" style="font-size: 2rem; margin-bottom: 2rem;">What Our Clients Say</h2>
+  <div style="max-width: 900px; margin: auto; display: flex; flex-wrap: wrap; gap: 2rem; justify-content: center;">
+    <div style="flex: 1; min-width: 250px; background: #f5f5f5; padding: 1.5rem; border-radius: 10px;">
+      <div style="font-size: 1.2rem; color: #f5b301; margin-bottom: 0.5rem;">⭐⭐⭐⭐⭐</div>
+      <p id="testimonial-1">“Marildo was incredibly professional and friendly. We had an amazing time in Dhërmi thanks to him!”</p>
+      <strong>- Anna from Germany</strong>
+    </div>
+    <div style="flex: 1; min-width: 250px; background: #f5f5f5; padding: 1.5rem; border-radius: 10px;">
+      <div style="font-size: 1.2rem; color: #f5b301; margin-bottom: 0.5rem;">⭐⭐⭐⭐⭐</div>
+      <p id="testimonial-2">“The best taxi service in the Albanian Riviera. Clean car, great local tips, and a safe ride!”</p>
+      <strong>- Luca from Italy</strong>
+    </div>
+  </div>
+</section>
+
+
+  <!-- CALL TO ACTION SECTION -->
+  <section style="background-color: #222; color: white; text-align: center; padding: 4rem 1rem;">
+    <h2 id="cta-title" style="font-size: 2rem; margin-bottom: 1rem;">Ready to Explore Dhërmi?</h2>
+    <p id="cta-text" style="font-size: 1.2rem; margin-bottom: 2rem;">Contact Marildo now and book your ride with the best local taxi service.</p>
+    <a id="cta-button" href="https://wa.me/355693267518?text=Hi%20Marildo%2C%20I%20want%20to%20book%20a%20taxi" target="_blank" style="background-color: #25d366; color: white; padding: 0.8rem 1.5rem; border-radius: 5px; text-decoration: none; font-weight: bold;">
+      📲 Book on WhatsApp
+    </a>
+  </section>
+
+  <!-- FOOTER -->
+  <footer style="background-color: #111; color: #ccc; text-align: center; padding: 2rem;">
+    <p><strong id="footer-contact-label">Contact:</strong> +355 69 326 7518 | WhatsApp Available</p>
+    <p><strong id="footer-location-label">Location:</strong> Dhërmi, Vlorë, Albania</p>
+    <p>&copy; 2025 Taxi Marildo. All rights reserved.</p>
+  </footer>
+
+  <!-- FLOATING WHATSAPP BUTTON -->
+  <a href="https://wa.me/355693267518?text=Hi%20Marildo%2C%20I%20want%20to%20book%20a%20taxi" 
+  target="_blank" 
+  class="whatsapp-button" 
+  id="floating-whatsapp">
+  📲 Ready to Book
+  </a>
+
+  <script>
+    const translations = {
+      en: {
+        navHome: "Home",
+        navAbout: "About Driver",
+        navContact: "Contact",
+        heroTitle: "TAXI MARILDO",
+        heroSubtitle: "Taxi Dhërmi Albania",
+        driverName: "Marildo",
+        driverDescription: "Hi, I'm Marildo, a professional taxi driver based in the beautiful coastal town of Dhërmi, Albania. With over 10 years of experience, I offer safe, comfortable, and reliable transportation throughout the Albanian Riviera. Whether you're headed to the airport, a hidden beach, or just around town — I’m here to get you there.",
+        whyChooseTitle: "Why Choose Us?",
+        reliableServiceTitle: "🚗 Reliable Service",
+        reliableServiceText: "Always on time, every time. Punctuality is our promise.",
+        localKnowledgeTitle: "🌍 Local Knowledge",
+        localKnowledgeText: "We know Dhërmi like no one else. Get local tips along the way.",
+        safeCleanTitle: "🛡️ Safe & Clean Rides",
+        safeCleanText: "Your safety and comfort are our top priorities on every journey.",
+        testimonialsTitle: "What Our Clients Say",
+        testimonial1: "“Marildo was incredibly professional and friendly. We had an amazing time in Dhërmi thanks to him!”",
+        testimonial2: "“The best taxi service in the Albanian Riviera. Clean car, great local tips, and a safe ride!”",
+        galleryTitle: "Gallery",
+        ctaTitle: "Ready to Explore Dhërmi?",
+        ctaText: "Contact Marildo now and book your ride with the best local taxi service.",
+        ctaButton: "📲 Book on WhatsApp",
+        footerContact: "Contact:",
+        footerLocation: "Location:",
+        floatingWhatsApp: "📲 Ready to Book"
+      },
+      it: {
+        navHome: "Home",
+        navAbout: "Info Autista",
+        navContact: "Contatto",
+        heroTitle: "TAXI MARILDO",
+        heroSubtitle: "Taxi Dhërmi Albania",
+        driverName: "Marildo",
+        driverDescription: "Ciao, sono Marildo, un tassista professionista basato nella splendida cittadina costiera di Dhërmi, Albania. Con oltre 10 anni di esperienza, offro trasporti sicuri, confortevoli e affidabili lungo la Riviera Albanese. Che tu debba andare in aeroporto, a una spiaggia nascosta o semplicemente in città — sono qui per accompagnarti.",
+        whyChooseTitle: "Perché Sceglierci?",
+        reliableServiceTitle: "🚗 Servizio Affidabile",
+        reliableServiceText: "Sempre puntuali, ogni volta. La puntualità è la nostra promessa.",
+        localKnowledgeTitle: "🌍 Conoscenza Locale",
+        localKnowledgeText: "Conosciamo Dhërmi come nessun altro. Ricevi consigli locali durante il viaggio.",
+        safeCleanTitle: "🛡️ Corse Sicure e Pulite",
+        safeCleanText: "La tua sicurezza e il tuo comfort sono le nostre massime priorità in ogni viaggio.",
+        testimonialsTitle: "Cosa Dicono i Nostri Clienti",
+        testimonial1: "“Marildo è stato incredibilmente professionale e cordiale. Abbiamo trascorso un tempo fantastico a Dhërmi grazie a lui!”",
+        testimonial2: "“Il miglior servizio taxi della Riviera Albanese. Auto pulita, ottimi consigli locali e un viaggio sicuro!”",
+        galleryTitle: "Galleria",
+        ctaTitle: "Pronto per Esplorare Dhërmi?",
+        ctaText: "Contatta Marildo ora e prenota la tua corsa con il miglior servizio taxi locale.",
+        ctaButton: "📲 Prenota su WhatsApp",
+        footerContact: "Contatto:",
+        footerLocation: "Posizione:",
+        floatingWhatsApp: "📲 Pronto a Prenotare"
+      },
+      sq: {
+        navHome: "Home",
+        navAbout: "Shoferi",
+        navContact: "Kontakti",
+        heroTitle: "TAXI MARILDO",
+        heroSubtitle: "Taksi Dhërmi Shqipëri",
+        driverName: "Marildo",
+        driverDescription: "Përshëndetje, jam Marildo, një shofer taksie profesionist në qytetin e bukur bregdetar të Dhërmiut. Me mbi 10 vite përvojë, ofroj transport të sigurt, komod dhe të besueshëm në të gjithë Rivierën Shqiptare.",
+        whyChooseTitle: "Pse të Zgjidhni Ne?",
+        reliableServiceTitle: "🚗 Shërbim i Besueshëm",
+        reliableServiceText: "Gjithmonë në kohë. Pika jonë e fortë është përpikmëria.",
+        localKnowledgeTitle: "🌍 Njohuri Lokale",
+        localKnowledgeText: "E njohim Dhërmiun më mirë se kushdo. Merrni këshilla lokale gjatë rrugës.",
+        safeCleanTitle: "🛡️ Udhëtime të Sigurta & të Pastra",
+        safeCleanText: "Siguria dhe komoditeti juaj janë prioriteti ynë në çdo udhëtim.",
+        testimonialsTitle: "Çfarë Thonë Klientët Tanë",
+        testimonial1: "“Marildo ishte shumë profesionist dhe miqësor. Kaluam një kohë fantastike në Dhërmi falë tij!”",
+        testimonial2: "“Shërbimi më i mirë i taksisë në Rivierën Shqiptare. Makina e pastër, këshilla të mira dhe udhëtim i sigurt!”",
+        galleryTitle: "Galeria",
+        ctaTitle: "Gati për të Eksploruar Dhërmiun?",
+        ctaText: "Kontaktoni Marildon tani dhe rezervoni udhëtimin tuaj me shërbimin më të mirë lokal të taksisë.",
+        ctaButton: "📲 Rezervo në WhatsApp",
+        footerContact: "Kontakt:",
+        footerLocation: "Vendndodhja:",
+        floatingWhatsApp: "📲 Gati për të Rezervuar"
+      }
+    };
+  
+    const elements = {
+      navHome: "nav-home",
+      navAbout: "nav-about",
+      navContact: "contactNav",
+      heroTitle: "hero-title",
+      heroSubtitle: "hero-subtitle",
+      driverName: "driver-name",
+      driverDescription: "driver-description",
+      whyChooseTitle: "why-choose-title",
+      reliableServiceTitle: "reliable-service-title",
+      reliableServiceText: "reliable-service-text",
+      localKnowledgeTitle: "local-knowledge-title",
+      localKnowledgeText: "local-knowledge-text",
+      safeCleanTitle: "safe-clean-title",
+      safeCleanText: "safe-clean-text",
+      testimonialsTitle: "testimonials-title",
+      testimonial1: "testimonial-1",
+      testimonial2: "testimonial-2",
+      galleryTitle: "gallery-title",
+      ctaTitle: "cta-title",
+      ctaText: "cta-text",
+      ctaButton: "cta-button",
+      footerContact: "footer-contact-label",
+      footerLocation: "footer-location-label",
+      floatingWhatsApp: "floating-whatsapp"
+    };
+  
+    document.getElementById("language-select").addEventListener("change", function () {
+      const selectedLang = this.value;
+      const langText = translations[selectedLang];
+  
+      for (const key in elements) {
+        const el = document.getElementById(elements[key]);
+        if (el) {
+          el.textContent = langText[key];
+        }
+      }
+    });
+  </script>
+
+
+
+</body>
+</html>
