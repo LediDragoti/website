@@ -79,8 +79,8 @@
     /* Language selector style */
     .lang-select {
       position: fixed;
-      top: 10px;
-      right: 10px;
+      bottom: 80px; /* adjust this value */
+      right: 20px;
       z-index: 1001;
       color: #222;
       font-weight: bold;
@@ -241,17 +241,7 @@
     </div>
   </section>
 
-  <!-- NAVIGATION BAR -->
-  <nav>
-    <a href="#home" id="nav-home">Home</a>
-    <a href="#about" id="nav-about">About Driver</a>
-    <a href="#" id="contactNav" style="color: white; margin-right: 1rem; cursor: pointer;">Contact</a>
-    <select class="lang-select" id="language-select" aria-label="Select language">
-      <option value="en">English</option>
-      <option value="it">Italiano</option>
-      <option value="sq">Shqip</option>
-    </select>
-  </nav>
+
   
 <!-- Modal Overlay -->
 
@@ -354,6 +344,13 @@
     <p><strong id="footer-location-label">Location:</strong> Dhërmi, Vlorë, Albania</p>
     <p>&copy; 2025 Taxi Marildo. All rights reserved.</p>
   </footer>
+
+  <!-- Floating language selector (example placement) -->
+<select class="lang-select" id="language-select" aria-label="Select language" style="position: fixed; bottom: 80px; right: 20px; z-index: 1001;">
+  <option value="en">🇬🇧 English</option>
+  <option value="it">🇮🇹 Italiano</option>
+  <option value="sq">🇦🇱 Shqip</option>
+</select>
 
   <!-- FLOATING WHATSAPP BUTTON -->
   <a href="https://wa.me/355693267518?text=Hi%20Marildo%2C%20I%20want%20to%20book%20a%20taxi" 
